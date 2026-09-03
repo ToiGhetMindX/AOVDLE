@@ -57,7 +57,7 @@
 
     <div class="container">
         <div class="stages-bar">
-            <div class="stage-item" id="stage-0">1. VÒNG BẢNG (DỄ)</div>
+            <div class="stage-item" id="stage-0">1. VÒNG BẢNG</div>
             <div class="stage-item" id="stage-1">2. TỨ KẾT</div>
             <div class="stage-item" id="stage-2">3. BÁN KẾT</div>
             <div class="stage-item" id="stage-3">4. CHUNG KẾT</div>
@@ -66,7 +66,7 @@
         <div class="lineups-wrapper">
             <div class="lineup-board">
                 <div class="lineup-title">
-                    <span>ĐỘI HÌNH CỦA BẠN (CỐ ĐỊNH)</span>
+                    <span>ĐỘI HÌNH CỦA BẠN</span>
                     <span id="player-total-tag" style="font-size: 0.9rem; color: #f8fafc; background: #065f46; padding: 2px 8px; border-radius: 4px;">0 PTS</span>
                 </div>
                 <div class="slots-grid" id="my-slots-container"></div>
@@ -74,7 +74,7 @@
 
             <div class="lineup-board">
                 <div class="lineup-title" style="color: #ef4444;">
-                    <span>ĐỐI THỦ (RANDOM)</span>
+                    <span>ĐỐI THỦ (THEO CẤP ĐỘ VÒNG)</span>
                     <span id="enemy-total-tag" style="font-size: 0.9rem; color: #f8fafc; background: #991b1b; padding: 2px 8px; border-radius: 4px;">??? PTS</span>
                 </div>
                 <div class="slots-grid" id="enemy-slots-container"></div>
@@ -82,7 +82,7 @@
         </div>
 
         <div class="draft-section" id="draft-box">
-            <div class="lineup-title" style="color: #38bdf8;">ROLL & PICK ĐỘI HÌNH BAN ĐẦU (DÙNG CHO TOÀN BỘ GIẢI)</div>
+            <div class="lineup-title" style="color: #38bdf8;">ROLL & PICK ĐỘI HÌNH BAN ĐẦU</div>
             <div class="teams-grid" id="teams-container"></div>
         </div>
 
@@ -99,34 +99,52 @@
 
     <script>
         const DATABASE = [
-            // === AOG ===
-            { teamName: "FPT X FLASH", year: 2024, region: "AOG", top: { name: "Bear", power: 90 }, jug: { name: "HuyHoang", power: 91 }, mid: { name: "XB", power: 93 }, ad: { name: "Betroc", power: 92 }, sup: { name: "Yutan", power: 89 } },
-            { teamName: "GG LIVE", year: 2024, region: "AOG", top: { name: "Kuga", power: 88 }, jug: { name: "Gray", power: 90 }, mid: { name: "Bridget", power: 89 }, ad: { name: "Hoangtd", power: 91 }, sup: { name: "Tama", power: 88 } },
-            { teamName: "TEAM FLASH", year: 2019, region: "AOG", top: { name: "Gấu", power: 97 }, jug: { name: "ADC", power: 100 }, mid: { name: "XB", power: 99 }, ad: { name: "Elly", power: 98 }, sup: { name: "ProE", power: 99 } },
+            // === AOG (VIỆT NAM) ===
+            { teamName: "TEAM FLASH", year: 2019, region: "AOG", top: { name: "Elly", power: 98 }, jug: { name: "ADC", power: 100 }, mid: { name: "XB", power: 99 }, ad: { name: "Daim", power: 93 }, sup: { name: "ProE", power: 99 } },
             { teamName: "SAIGON PHANTOM", year: 2023, region: "AOG", top: { name: "Jiro", power: 95 }, jug: { name: "Bang", power: 100 }, mid: { name: "Fish", power: 97 }, ad: { name: "Red", power: 96 }, sup: { name: "Khoa", power: 97 } },
+            { teamName: "SAIGON PHANTOM", year: 2020, region: "AOG", top: { name: "BronzeV", power: 93 }, jug: { name: "Bangg", power: 96 }, mid: { name: "LACLAC", power: 89 }, ad: { name: "Red", power: 92 }, sup: { name: "Zeref", power: 91 } },
+            { teamName: "V GAMING", year: 2022, region: "AOG", top: { name: "BirdLB", power: 96 }, jug: { name: "Quang", power: 95 }, mid: { name: "Maris", power: 99 }, ad: { name: "Sea", power: 94 }, sup: { name: "Han", power: 96 } },
+            { teamName: "HTVC IGP GAMING", year: 2020, region: "AOG", top: { name: "K.A", power: 94 }, jug: { name: "TURTLE", power: 92 }, mid: { name: "NESS", power: 89 }, ad: { name: "DAIM", power: 95 }, sup: { name: "CHOBITS", power: 90 } },
+            { teamName: "BOX GAMING", year: 2020, region: "AOG", top: { name: "Kyobi", power: 86 }, jug: { name: "NDG", power: 87 }, mid: { name: "Akashi", power: 89 }, ad: { name: "Ara", power: 91 }, sup: { name: "Oppa", power: 86 } },
+            { teamName: "MOCHA ZD ESPORTS", year: 2019, region: "AOG", top: { name: "Henry", power: 85 }, jug: { name: "Khien", power: 89 }, mid: { name: "Akashi", power: 88 }, ad: { name: "Ara", power: 90 }, sup: { name: "Oppa", power: 85 } },
+            { teamName: "FPT X FLASH", year: 2025, region: "AOG", top: { name: "Bear", power: 87 }, jug: { name: "Gray", power: 86 }, mid: { name: "Maris", power: 89 }, ad: { name: "HuyHoang", power: 84 }, sup: { name: "Yutan", power: 83 } },
+            { teamName: "TDT ESPORTS", year: 2024, region: "AOG", top: { name: "NOLAN", power: 83 }, jug: { name: "KAISA", power: 85 }, mid: { name: "ALIYAH", power: 84 }, ad: { name: "TNHAN", power: 83 }, sup: { name: "ARA", power: 86 } },
+            { teamName: "CERBERUS ESPORTS", year: 2021, region: "AOG", top: { name: "XEHA", power: 81 }, jug: { name: "20PERCENT", power: 84 }, mid: { name: "POONS", power: 82 }, ad: { name: "LUVC", power: 83 }, sup: { name: "SCIZZAR", power: 80 } },
+            { teamName: "HEAVY", year: 2022, region: "AOG", top: { name: "Kev", power: 80 }, jug: { name: "Judas", power: 85 }, mid: { name: "Triet", power: 83 }, ad: { name: "Badas", power: 81 }, sup: { name: "ChOBT", power: 80 } },
+            { teamName: "MDH ESPORTS", year: 2023, region: "AOG", top: { name: "PHOENIX", power: 82 }, jug: { name: "SIN", power: 80 }, mid: { name: "WHITET", power: 81 }, ad: { name: "ARA", power: 85 }, sup: { name: "TUANTRAN", power: 79 } },
+            { teamName: "FAP ESPORTS", year: 2022, region: "AOG", top: { name: "16.03", power: 78 }, jug: { name: "GORO", power: 80 }, mid: { name: "WHITET", power: 80 }, ad: { name: "MH", power: 78 }, sup: { name: "SIN", power: 77 } },
+            { teamName: "B2F GAMING", year: 2021, region: "AOG", top: { name: "KUBO", power: 77 }, jug: { name: "MARTIN", power: 79 }, mid: { name: "RINA", power: 78 }, ad: { name: "MEDUSA", power: 79 }, sup: { name: "CYRUS", power: 76 } },
 
-            // === RPL ===
-            { teamName: "BACON TIME", year: 2023, region: "RPL", top: { name: "Markky", power: 99 }, jug: { name: "AlmondP", power: 98 }, mid: { name: "Kimsensei", power: 97 }, ad: { name: "Moowan", power: 98 }, sup: { name: "TaoX", power: 98 } },
-            { teamName: "E ARENA", year: 2025, region: "RPL", top: { name: "Sry", power: 92 }, jug: { name: "Nbank", power: 91 }, mid: { name: "QQ", power: 93 }, ad: { name: "Negan", power: 90 }, sup: { name: "Pichu", power: 91 } },
+            // === RPL (THÁI LAN) ===
+            { teamName: "BACON TIME", year: 2023, region: "RPL", top: { name: "MarkKy", power: 100 }, jug: { name: "Alain", power: 96 }, mid: { name: "Kimsensei", power: 97 }, ad: { name: "Erez", power: 99 }, sup: { name: "TaoX", power: 98 } },
+            { teamName: "TALON ESPORTS", year: 2021, region: "RPL", top: { name: "NTNz", power: 95 }, jug: { name: "MOOP", power: 98 }, mid: { name: "IpodPro", power: 98 }, ad: { name: "Erez", power: 98 }, sup: { name: "Tony", power: 96 } },
+            { teamName: "BURIRAM UNITED", year: 2021, region: "RPL", top: { name: "Overfly", power: 94 }, jug: { name: "FirstOne", power: 93 }, mid: { name: "NuNu", power: 99 }, ad: { name: "Difoxn", power: 95 }, sup: { name: "Isilindilz", power: 93 } },
+            { teamName: "BAZAAR GAMING", year: 2020, region: "RPL", top: { name: "MarkKy", power: 92 }, jug: { name: "DCB", power: 89 }, mid: { name: "QQ", power: 91 }, ad: { name: "Erez", power: 93 }, sup: { name: "TaoX", power: 90 } },
+            { teamName: "VALENCIA CF", year: 2022, region: "RPL", top: { name: "SRY", power: 89 }, jug: { name: "NBank", power: 87 }, mid: { name: "QQ", power: 88 }, ad: { name: "Pichu", power: 86 }, sup: { name: "TAOz", power: 86 } },
+            { teamName: "PSG ESPORTS", year: 2025, region: "RPL", top: { name: "4SAVAGE", power: 88 }, jug: { name: "FAKEPLAYZ", power: 85 }, mid: { name: "BONUS", power: 86 }, ad: { name: "DEBOOM", power: 85 }, sup: { name: "ACAPAE", power: 84 } },
 
-            // === GCS ===
-            { teamName: "DEEP CROSS GAMING", year: 2026, region: "GCS", top: { name: "Weiyu", power: 99 }, jug: { name: "Xcen", power: 100 }, mid: { name: "Xinchen", power: 99 }, ad: { name: "Youlun", power: 98 }, sup: { name: "Yaooo", power: 98 } },
-            { teamName: "BANMEI GAMING", year: 2024, region: "GCS", top: { name: "Kawhi", power: 98 }, jug: { name: "Yanyan", power: 97 }, mid: { name: "Neil", power: 99 }, ad: { name: "Kai", power: 98 }, sup: { name: "Junnn", power: 97 } },
-            { teamName: "CATHAY ONE TEAM", year: 2025, region: "GCS", top: { name: "Leduo", power: 94 }, jug: { name: "Tlin", power: 93 }, mid: { name: "Tura", power: 95 }, ad: { name: "Wuliu", power: 94 }, sup: { name: "Junnn", power: 94 } },
-            { teamName: "BIKERTOPIA ESPORTS", year: 2022, region: "GCS", top: { name: "Pika", power: 95 }, jug: { name: "T1", power: 96 }, mid: { name: "Xin", power: 94 }, ad: { name: "Zirui", power: 95 }, sup: { name: "Tlin", power: 94 } },
+            // === GCS (ĐÀI BẮC TRUNG HOA) ===
+            { teamName: "MAD TEAM", year: 2020, region: "GCS", top: { name: "Yuzon", power: 96 }, jug: { name: "Neil", power: 100 }, mid: { name: "Fanta", power: 95 }, ad: { name: "03.22", power: 98 }, sup: { name: "KuKu", power: 96 } },
+            { teamName: "FLASH WOLVES", year: 2020, region: "GCS", top: { name: "Heroes", power: 94 }, jug: { name: "Kato", power: 95 }, mid: { name: "XiXi", power: 96 }, ad: { name: "Gaduo", power: 93 }, sup: { name: "Gua", power: 94 } },
+            { teamName: "BRO ESPORTS", year: 2022, region: "GCS", top: { name: "Pika", power: 95 }, jug: { name: "T4", power: 93 }, mid: { name: "Xin", power: 94 }, ad: { name: "Zirui", power: 93 }, sup: { name: "T2", power: 94 } },
+            { teamName: "ONE TEAM", year: 2022, region: "GCS", top: { name: "LunLun", power: 93 }, jug: { name: "Nk", power: 95 }, mid: { name: "WaWa", power: 93 }, ad: { name: "Kai", power: 92 }, sup: { name: "Zhe", power: 92 } },
+            { teamName: "FLASH WOLVES", year: 2022, region: "GCS", top: { name: "ZHENZHE", power: 91 }, jug: { name: "ZEN", power: 93 }, mid: { name: "NNNL", power: 92 }, ad: { name: "YUXIANG", power: 93 }, sup: { name: "GUA", power: 91 } },
+            { teamName: "BANMEI GAMING", year: 2024, region: "GCS", top: { name: "Kawhi", power: 92 }, jug: { name: "Yanyan", power: 88 }, mid: { name: "Star", power: 89 }, ad: { name: "Kai", power: 88 }, sup: { name: "Junnn", power: 87 } },
+            { teamName: "HONG KONG ATTITUDE", year: 2025, region: "GCS", top: { name: "OUTCAST", power: 88 }, jug: { name: "YANPU", power: 87 }, mid: { name: "KUNCHI", power: 89 }, ad: { name: "DWEI", power: 87 }, sup: { name: "WENYAN", power: 86 } },
 
-            // === QUỐC TẾ KHÁC ===
-            { teamName: "NOVA ESPORTS", year: 2022, region: "INT", top: { name: "Snox", power: 84 }, jug: { name: "Anotherr", power: 85 }, mid: { name: "HeiHei", power: 83 }, ad: { name: "Pose", power: 84 }, sup: { name: "Benji", power: 82 } }
+            // === WILD CARD / INTERNATIONAL ===
+            { teamName: "DG ESPORTS", year: 2022, region: "ASL", top: { name: "Spades", power: 76 }, jug: { name: "AySE", power: 75 }, mid: { name: "MamaS", power: 74 }, ad: { name: "Nugie", power: 76 }, sup: { name: "BackDoor", power: 73 } },
+            { teamName: "SCARZ", year: 2022, region: "JAPAN", top: { name: "May", power: 66 }, jug: { name: "F2", power: 67 }, mid: { name: "Washi", power: 64 }, ad: { name: "Sloth", power: 65 }, sup: { name: "Moba", power: 63 } }
         ];
 
         const ROLES = ["top", "jug", "mid", "ad", "sup"];
         const ROLE_NAMES = ["TOP", "JUG", "MID", "AD", "SUP"];
         
         const STAGES = [
-            { name: "VÒNG BẢNG", mult: 0.75 },
-            { name: "TỨ KẾT", mult: 1.0 },
-            { name: "BÁN KẾT", mult: 1.10 },
-            { name: "CHUNG KẾT", mult: 1.25 }
+            { name: "VÒNG BẢNG", minPower: 63, maxPower: 86 },
+            { name: "TỨ KẾT", minPower: 84, maxPower: 92 },
+            { name: "BÁN KẾT", minPower: 90, maxPower: 96 },
+            { name: "CHUNG KẾT", minPower: 95, maxPower: 100 }
         ];
 
         let currentStageIdx = 0;
@@ -156,20 +174,40 @@
 
         function prepareStageMatch() {
             isMatchRevealed = false;
+            const currentStage = STAGES[currentStageIdx];
 
+            // Bốc ngẫu nhiên tuyển thủ theo phạm vi sức mạnh của vòng đấu hiện tại
             enemyTeam = ROLES.map(role => {
-                let randomTeam = DATABASE[Math.floor(Math.random() * DATABASE.length)];
-                return {
-                    name: randomTeam[role].name,
-                    power: randomTeam[role].power,
-                    team: randomTeam.teamName,
-                    year: randomTeam.year
-                };
+                let eligiblePlayers = [];
+                DATABASE.forEach(team => {
+                    let player = team[role];
+                    if (player.power >= currentStage.minPower && player.power <= currentStage.maxPower) {
+                        eligiblePlayers.push({
+                            name: player.name,
+                            power: player.power,
+                            team: team.teamName,
+                            year: team.year
+                        });
+                    }
+                });
+
+                if (eligiblePlayers.length === 0) {
+                    DATABASE.forEach(team => {
+                        eligiblePlayers.push({
+                            name: team[role].name,
+                            power: team[role].power,
+                            team: team.teamName,
+                            year: team.year
+                        });
+                    });
+                }
+
+                return eligiblePlayers[Math.floor(Math.random() * eligiblePlayers.length)];
             });
 
             let baseEnemyPower = enemyTeam.reduce((sum, p) => sum + p.power, 0);
             let synergyEnemy = calculateSynergyBonus(enemyTeam);
-            enemyTotalPower = Math.round((baseEnemyPower + synergyEnemy) * STAGES[currentStageIdx].mult);
+            enemyTotalPower = baseEnemyPower + synergyEnemy; 
 
             updateProgressBar();
             document.getElementById("enemy-total-tag").innerText = "??? PTS";
