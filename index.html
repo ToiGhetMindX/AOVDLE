@@ -64,7 +64,6 @@
         </div>
 
         <div class="lineups-wrapper">
-            <!-- Đội Hình Của Bạn (Cố định sau khi Draft xong) -->
             <div class="lineup-board">
                 <div class="lineup-title">
                     <span>ĐỘI HÌNH CỦA BẠN (CỐ ĐỊNH)</span>
@@ -73,7 +72,6 @@
                 <div class="slots-grid" id="my-slots-container"></div>
             </div>
 
-            <!-- Đội Hình Đối Thủ (Mới theo từng vòng) -->
             <div class="lineup-board">
                 <div class="lineup-title" style="color: #ef4444;">
                     <span>ĐỐI THỦ (RANDOM)</span>
@@ -101,20 +99,24 @@
 
     <script>
         const DATABASE = [
-            { teamName: "TEAM FLASH", year: 2019, region: "AOG", top: { name: "Elly", power: 98 }, jug: { name: "ADC", power: 100 }, mid: { name: "XB", power: 99 }, ad: { name: "Daim", power: 93 }, sup: { name: "ProE", power: 99 } },
-            { teamName: "TEAM FLASH", year: 2023, region: "AOG", top: { name: "Bear", power: 88 }, jug: { name: "Chu", power: 86 }, mid: { name: "XB", power: 92 }, ad: { name: "Bé Trọc", power: 89 }, sup: { name: "Case", power: 87 } },
+            // === AOG ===
+            { teamName: "FPT X FLASH", year: 2024, region: "AOG", top: { name: "Bear", power: 90 }, jug: { name: "HuyHoang", power: 91 }, mid: { name: "XB", power: 93 }, ad: { name: "Betroc", power: 92 }, sup: { name: "Yutan", power: 89 } },
+            { teamName: "GG LIVE", year: 2024, region: "AOG", top: { name: "Kuga", power: 88 }, jug: { name: "Gray", power: 90 }, mid: { name: "Bridget", power: 89 }, ad: { name: "Hoangtd", power: 91 }, sup: { name: "Tama", power: 88 } },
+            { teamName: "TEAM FLASH", year: 2019, region: "AOG", top: { name: "Gấu", power: 97 }, jug: { name: "ADC", power: 100 }, mid: { name: "XB", power: 99 }, ad: { name: "Elly", power: 98 }, sup: { name: "ProE", power: 99 } },
             { teamName: "SAIGON PHANTOM", year: 2023, region: "AOG", top: { name: "Jiro", power: 95 }, jug: { name: "Bang", power: 100 }, mid: { name: "Fish", power: 97 }, ad: { name: "Red", power: 96 }, sup: { name: "Khoa", power: 97 } },
-            { teamName: "SAIGON PHANTOM", year: 2020, region: "AOG", top: { name: "BronzeV", power: 93 }, jug: { name: "Bangg", power: 96 }, mid: { name: "LACLAC", power: 89 }, ad: { name: "Red", power: 92 }, sup: { name: "Zeref", power: 91 } },
-            { teamName: "V GAMING", year: 2022, region: "AOG", top: { name: "BirdLB", power: 96 }, jug: { name: "Quang", power: 95 }, mid: { name: "Maris", power: 99 }, ad: { name: "Sea", power: 94 }, sup: { name: "Han", power: 96 } },
-            { teamName: "FPT X FLASH", year: 2025, region: "AOG", top: { name: "Bear", power: 87 }, jug: { name: "Gray", power: 86 }, mid: { name: "Maris", power: 89 }, ad: { name: "HuyHoang", power: 84 }, sup: { name: "Yutan", power: 83 } },
-            { teamName: "TT GAMING", year: 2025, region: "AOG", top: { name: "Case", power: 84 }, jug: { name: "Sonic", power: 83 }, mid: { name: "Cheri", power: 82 }, ad: { name: "Ngọc Quý", power: 85 }, sup: { name: "Dominic", power: 82 } },
-            
-            { teamName: "BACON TIME", year: 2023, region: "RPL", top: { name: "MarkKy", power: 100 }, jug: { name: "Alain", power: 96 }, mid: { name: "Kimsensei", power: 97 }, ad: { name: "Erez", power: 99 }, sup: { name: "TaoX", power: 98 } },
-            { teamName: "TALON ESPORTS", year: 2021, region: "RPL", top: { name: "NTNz", power: 95 }, jug: { name: "MOOP", power: 98 }, mid: { name: "IpodPro", power: 98 }, ad: { name: "Erez", power: 98 }, sup: { name: "Tony", power: 96 } },
-            { teamName: "BURIRAM UNITED", year: 2021, region: "RPL", top: { name: "Overfly", power: 94 }, jug: { name: "F1", power: 93 }, mid: { name: "NuNu", power: 99 }, ad: { name: "Difoxn", power: 95 }, sup: { name: "KSSA", power: 92 } },
 
-            { teamName: "MAD TEAM", year: 2020, region: "GCS", top: { name: "Yuzon", power: 96 }, jug: { name: "Neil", power: 100 }, mid: { name: "Fanta", power: 95 }, ad: { name: "03.22", power: 98 }, sup: { name: "KuKu", power: 96 } },
-            { teamName: "FLASH WOLVES", year: 2022, region: "GCS", top: { name: "NNNL", power: 92 }, jug: { name: "ZEN", power: 93 }, mid: { name: "ZHENZHE", power: 92 }, ad: { name: "YUXIANG", power: 93 }, sup: { name: "GUA", power: 91 } }
+            // === RPL ===
+            { teamName: "BACON TIME", year: 2023, region: "RPL", top: { name: "Markky", power: 99 }, jug: { name: "AlmondP", power: 98 }, mid: { name: "Kimsensei", power: 97 }, ad: { name: "Moowan", power: 98 }, sup: { name: "TaoX", power: 98 } },
+            { teamName: "E ARENA", year: 2025, region: "RPL", top: { name: "Sry", power: 92 }, jug: { name: "Nbank", power: 91 }, mid: { name: "QQ", power: 93 }, ad: { name: "Negan", power: 90 }, sup: { name: "Pichu", power: 91 } },
+
+            // === GCS ===
+            { teamName: "DEEP CROSS GAMING", year: 2026, region: "GCS", top: { name: "Weiyu", power: 99 }, jug: { name: "Xcen", power: 100 }, mid: { name: "Xinchen", power: 99 }, ad: { name: "Youlun", power: 98 }, sup: { name: "Yaooo", power: 98 } },
+            { teamName: "BANMEI GAMING", year: 2024, region: "GCS", top: { name: "Kawhi", power: 98 }, jug: { name: "Yanyan", power: 97 }, mid: { name: "Neil", power: 99 }, ad: { name: "Kai", power: 98 }, sup: { name: "Junnn", power: 97 } },
+            { teamName: "CATHAY ONE TEAM", year: 2025, region: "GCS", top: { name: "Leduo", power: 94 }, jug: { name: "Tlin", power: 93 }, mid: { name: "Tura", power: 95 }, ad: { name: "Wuliu", power: 94 }, sup: { name: "Junnn", power: 94 } },
+            { teamName: "BIKERTOPIA ESPORTS", year: 2022, region: "GCS", top: { name: "Pika", power: 95 }, jug: { name: "T1", power: 96 }, mid: { name: "Xin", power: 94 }, ad: { name: "Zirui", power: 95 }, sup: { name: "Tlin", power: 94 } },
+
+            // === QUỐC TẾ KHÁC ===
+            { teamName: "NOVA ESPORTS", year: 2022, region: "INT", top: { name: "Snox", power: 84 }, jug: { name: "Anotherr", power: 85 }, mid: { name: "HeiHei", power: 83 }, ad: { name: "Pose", power: 84 }, sup: { name: "Benji", power: 82 } }
         ];
 
         const ROLES = ["top", "jug", "mid", "ad", "sup"];
@@ -154,8 +156,7 @@
 
         function prepareStageMatch() {
             isMatchRevealed = false;
-            
-            // Random đối thủ độc lập cho vòng đấu hiện tại
+
             enemyTeam = ROLES.map(role => {
                 let randomTeam = DATABASE[Math.floor(Math.random() * DATABASE.length)];
                 return {
@@ -166,7 +167,6 @@
                 };
             });
 
-            // Tính toán điểm số đối thủ theo hệ số độ khó vòng
             let baseEnemyPower = enemyTeam.reduce((sum, p) => sum + p.power, 0);
             let synergyEnemy = calculateSynergyBonus(enemyTeam);
             enemyTotalPower = Math.round((baseEnemyPower + synergyEnemy) * STAGES[currentStageIdx].mult);
@@ -177,7 +177,6 @@
 
             renderLineups();
             
-            // Tự động lật mở kết quả đấu ngay nếu đã xong Draft từ Vòng 1
             if (isDraftFinished) {
                 executeMatch();
             }
@@ -211,7 +210,6 @@
         }
 
         function renderLineups() {
-            // Render Đội bạn
             const myContainer = document.getElementById("my-slots-container");
             myContainer.innerHTML = "";
             ROLES.forEach((role, idx) => {
@@ -226,7 +224,6 @@
                 myContainer.appendChild(card);
             });
 
-            // Render Đội đối thủ
             const enemyContainer = document.getElementById("enemy-slots-container");
             enemyContainer.innerHTML = "";
             ROLES.forEach((role, idx) => {
@@ -254,7 +251,9 @@
 
         function rollTeams() {
             let indices = [];
-            while(indices.length < 3) {
+            let attempts = 0;
+            while(indices.length < 3 && attempts < 100) {
+                attempts++;
                 let r = Math.floor(Math.random() * DATABASE.length);
                 if(!indices.includes(r)) indices.push(r);
             }
@@ -301,7 +300,6 @@
             };
             rolePicked[roleIdx] = true;
 
-            // Tính tổng sức mạnh hiển thị cố định của bạn
             let basePower = myTeam.reduce((sum, p) => sum + (p ? p.power : 0), 0);
             let synergyBonus = calculateSynergyBonus(myTeam);
             document.getElementById("player-total-tag").innerText = `${basePower + synergyBonus} PTS`;
@@ -321,7 +319,7 @@
             isMatchRevealed = true;
             document.getElementById("enemy-total-tag").innerText = `${enemyTotalPower} PTS`;
             
-            renderLineups(); // Lật mở đối thủ
+            renderLineups();
 
             let basePower = myTeam.reduce((sum, p) => sum + p.power, 0);
             let synergyBonus = calculateSynergyBonus(myTeam);
