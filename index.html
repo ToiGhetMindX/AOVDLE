@@ -28,6 +28,7 @@
         .team-info { font-size: 0.8rem; color: #94a3b8; }
 
         .draft-section { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; }
+        .draft-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         .team-card { background: #334155; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
         .team-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #475569; padding-bottom: 8px; }
@@ -37,6 +38,10 @@
         .role-btn { background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 8px; border-radius: 6px; cursor: pointer; text-align: left; transition: 0.2s; }
         .role-btn:hover:not(:disabled) { background: #3b82f6; border-color: #60a5fa; }
         .role-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .reroll-btn { background: #8b5cf6; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .reroll-btn:hover:not(:disabled) { background: #7c3aed; }
+        .reroll-btn:disabled { background: #475569; cursor: not-allowed; opacity: 0.5; }
 
         .result-box { display: none; background: #1e293b; border-radius: 12px; padding: 20px; border: 2px solid #38bdf8; text-align: center; margin-top: 10px; }
         .result-title { font-size: 1.5rem; margin-bottom: 10px; }
@@ -48,6 +53,7 @@
 
         @media (max-width: 768px) {
             .lineups-wrapper { grid-template-columns: 1fr; }
+            .draft-header { flex-direction: column; gap: 10px; align-items: flex-start; }
         }
     </style>
 </head>
@@ -82,7 +88,10 @@
         </div>
 
         <div class="draft-section" id="draft-box">
-            <div class="lineup-title" style="color: #38bdf8;">ROLL & PICK ĐỘI HÌNH BAN ĐẦU</div>
+            <div class="draft-header">
+                <div class="lineup-title" style="color: #38bdf8; margin: 0;">ROLL & PICK ĐỘI HÌNH BAN ĐẦU</div>
+                <button class="reroll-btn" id="reroll-btn" onclick="handleReroll()">🔄 Reroll (Còn 3 lượt)</button>
+            </div>
             <div class="teams-grid" id="teams-container"></div>
         </div>
 
@@ -122,13 +131,15 @@
             { teamName: "BAZAAR GAMING", year: 2020, region: "RPL", top: { name: "MarkKy", power: 92 }, jug: { name: "DCB", power: 89 }, mid: { name: "QQ", power: 91 }, ad: { name: "Erez", power: 93 }, sup: { name: "TaoX", power: 90 } },
             { teamName: "VALENCIA CF", year: 2022, region: "RPL", top: { name: "SRY", power: 89 }, jug: { name: "NBank", power: 87 }, mid: { name: "QQ", power: 88 }, ad: { name: "Pichu", power: 86 }, sup: { name: "TAOz", power: 86 } },
             { teamName: "PSG ESPORTS", year: 2025, region: "RPL", top: { name: "4SAVAGE", power: 88 }, jug: { name: "FAKEPLAYZ", power: 85 }, mid: { name: "BONUS", power: 86 }, ad: { name: "DEBOOM", power: 85 }, sup: { name: "ACAPAE", power: 84 } },
+            { teamName: "HYDRA ESPORTS", year: 2023, region: "RPL", top: { name: "KiNcH", power: 83 }, jug: { name: "Jungle", power: 84 }, mid: { name: "G3T31", power: 85 }, ad: { name: "1222", power: 83 }, sup: { name: "JingSheng", power: 82 } },
 
             // === GCS (ĐÀI BẮC TRUNG HOA) ===
+            { teamName: "FLASH WOLVES", year: 2025, region: "GCS", top: { name: "Nailiu", power: 98 }, jug: { name: "Zhan", power: 97 }, mid: { name: "Zhenzhe", power: 99 }, ad: { name: "Yuxiang", power: 98 }, sup: { name: "Weiz", power: 97 } },
             { teamName: "MAD TEAM", year: 2020, region: "GCS", top: { name: "Yuzon", power: 96 }, jug: { name: "Neil", power: 100 }, mid: { name: "Fanta", power: 95 }, ad: { name: "03.22", power: 98 }, sup: { name: "KuKu", power: 96 } },
             { teamName: "FLASH WOLVES", year: 2020, region: "GCS", top: { name: "Heroes", power: 94 }, jug: { name: "Kato", power: 95 }, mid: { name: "XiXi", power: 96 }, ad: { name: "Gaduo", power: 93 }, sup: { name: "Gua", power: 94 } },
             { teamName: "BRO ESPORTS", year: 2022, region: "GCS", top: { name: "Pika", power: 95 }, jug: { name: "T4", power: 93 }, mid: { name: "Xin", power: 94 }, ad: { name: "Zirui", power: 93 }, sup: { name: "T2", power: 94 } },
             { teamName: "ONE TEAM", year: 2022, region: "GCS", top: { name: "LunLun", power: 93 }, jug: { name: "Nk", power: 95 }, mid: { name: "WaWa", power: 93 }, ad: { name: "Kai", power: 92 }, sup: { name: "Zhe", power: 92 } },
-            { teamName: "FLASH WOLVES", year: 2022, region: "GCS", top: { name: "ZHENZHE", power: 91 }, jug: { name: "ZEN", power: 93 }, mid: { name: "NNNL", power: 92 }, ad: { name: "YUXIANG", power: 93 }, sup: { name: "GUA", power: 91 } },
+            { teamName: "FLASH WOLVES", year: 2022, region: "GCS", top: { name: "NNNL", power: 92 }, jug: { name: "ZEN", power: 93 }, mid: { name: "ZHENZHE", power: 91 }, ad: { name: "YUXIANG", power: 93 }, sup: { name: "GUA", power: 91 } },
             { teamName: "BANMEI GAMING", year: 2024, region: "GCS", top: { name: "Kawhi", power: 92 }, jug: { name: "Yanyan", power: 88 }, mid: { name: "Star", power: 89 }, ad: { name: "Kai", power: 88 }, sup: { name: "Junnn", power: 87 } },
             { teamName: "HONG KONG ATTITUDE", year: 2025, region: "GCS", top: { name: "OUTCAST", power: 88 }, jug: { name: "YANPU", power: 87 }, mid: { name: "KUNCHI", power: 89 }, ad: { name: "DWEI", power: 87 }, sup: { name: "WENYAN", power: 86 } },
 
@@ -153,6 +164,7 @@
         let enemyTotalPower = 0;
         let rolePicked = [false, false, false, false, false];
         let currentOptions = [];
+        let rerollCount = 3;
         let lastMatchWin = false;
         let isDraftFinished = false;
         let isMatchRevealed = false;
@@ -161,22 +173,41 @@
             currentStageIdx = 0;
             myTeam = [null, null, null, null, null];
             rolePicked = [false, false, false, false, false];
+            rerollCount = 3;
             isDraftFinished = false;
 
             document.getElementById("draft-box").style.display = "block";
             document.getElementById("result-box").style.display = "none";
             document.getElementById("player-total-tag").innerText = "0 PTS";
             
+            updateRerollButton();
             updateProgressBar();
             renderLineups();
             rollTeams();
+        }
+
+        function handleReroll() {
+            if (rerollCount > 0 && !isDraftFinished) {
+                rerollCount--;
+                updateRerollButton();
+                rollTeams();
+            }
+        }
+
+        function updateRerollButton() {
+            const btn = document.getElementById("reroll-btn");
+            btn.innerText = `🔄 Reroll (Còn ${rerollCount} lượt)`;
+            if (rerollCount <= 0) {
+                btn.disabled = true;
+            } else {
+                btn.disabled = false;
+            }
         }
 
         function prepareStageMatch() {
             isMatchRevealed = false;
             const currentStage = STAGES[currentStageIdx];
 
-            // Bốc ngẫu nhiên tuyển thủ theo phạm vi sức mạnh của vòng đấu hiện tại
             enemyTeam = ROLES.map(role => {
                 let eligiblePlayers = [];
                 DATABASE.forEach(team => {
