@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AOV Worlds Championship</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #0f172a; color: #f8fafc; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        h1 { color: #38bdf8; margin-bottom: 10px; text-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
+        .container { max-width: 1100px; width: 100%; display: flex; flex-direction: column; gap: 20px; }
+        
+        .stages-bar { display: flex; justify-content: space-between; background: #1e293b; padding: 15px; border-radius: 12px; border: 1px solid #334155; }
+        .stage-item { flex: 1; text-align: center; padding: 8px; font-weight: bold; color: #64748b; border-bottom: 3px solid #64748b; }
+        .stage-item.active { color: #38bdf8; border-color: #38bdf8; }
+        .stage-item.passed { color: #10b981; border-color: #10b981; }
+
+        .lineups-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .lineup-board { background: #1e293b; border-radius: 12px; padding: 15px; border: 1px solid #334155; }
+        .lineup-title { font-size: 1.1rem; color: #f59e0b; margin-bottom: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .slots-grid { display: flex; flex-direction: column; gap: 8px; }
+        .slot-card { background: #0f172a; border: 1px dashed #475569; border-radius: 6px; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .slot-card.filled { border-style: solid; border-color: #10b981; background: #064e3b; }
+        .slot-card.enemy { border-style: solid; border-color: #ef4444; background: #450a0a; }
+        .slot-card.hidden { border-style: dashed; border-color: #64748b; background: #0f172a; opacity: 0.6; }
+        .role-name { font-size: 0.8rem; color: #94a3b8; font-weight: bold; width: 60px; }
+        .player-name { font-size: 1rem; color: #ffffff; font-weight: bold; }
+        .team-info { font-size: 0.8rem; color: #94a3b8; }
+
+        .draft-section { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; }
+        .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .team-card { background: #334155; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .team-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #475569; padding-bottom: 8px; }
+        .team-title { font-weight: bold; color: #38bdf8; }
+        .region-badge { background: #0284c7; font-size: 0.75rem; padding: 2px 8px; border-radius: 12px; }
+        
+        .role-btn { background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 8px; border-radius: 6px; cursor: pointer; text-align: left; transition: 0.2s; }
+        .role-btn:hover:not(:disabled) { background: #3b82f6; border-color: #60a5fa; }
+        .role-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .result-box { display: none; background: #1e293b; border-radius: 12px; padding: 20px; border: 2px solid #38bdf8; text-align: center; margin-top: 10px; }
+        .result-title { font-size: 1.5rem; margin-bottom: 10px; }
+        .victory { color: #10b981; }
+        .defeat { color: #ef4444; }
+        .score-board { font-size: 1.2rem; margin: 15px 0; }
+        .action-btn { background: #f59e0b; color: #0f172a; border: none; padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+        .action-btn:hover { background: #d97706; }
+
+        @media (max-width: 768px) {
+            .lineups-wrapper { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎮 AOV WORLDS CHAMPIONSHIP 🎮</h1>
+
+    <div class="container">
+        <div class="stages-bar">
+            <div class="stage-item" id="stage-0">1. VÒNG BẢNG (DỄ)</div>
+            <div class="stage-item" id="stage-1">2. TỨ KẾT</div>
+            <div class="stage-item" id="stage-2">3. BÁN KẾT</div>
+            <div class="stage-item" id="stage-3">4. CHUNG KẾT</div>
+        </div>
+
+        <div class="lineups-wrapper">
+            <!-- Đội Hình Của Bạn (Cố định sau khi Draft xong) -->
+            <div class="lineup-board">
+                <div class="lineup-title">
+                    <span>ĐỘI HÌNH CỦA BẠN (CỐ ĐỊNH)</span>
+                    <span id="player-total-tag" style="font-size: 0.9rem; color: #f8fafc; background: #065f46; padding: 2px 8px; border-radius: 4px;">0 PTS</span>
+                </div>
+                <div class="slots-grid" id="my-slots-container"></div>
+            </div>
+
+            <!-- Đội Hình Đối Thủ (Mới theo từng vòng) -->
+            <div class="lineup-board">
+                <div class="lineup-title" style="color: #ef4444;">
+                    <span>ĐỐI THỦ (RANDOM)</span>
+                    <span id="enemy-total-tag" style="font-size: 0.9rem; color: #f8fafc; background: #991b1b; padding: 2px 8px; border-radius: 4px;">??? PTS</span>
+                </div>
+                <div class="slots-grid" id="enemy-slots-container"></div>
+            </div>
+        </div>
+
+        <div class="draft-section" id="draft-box">
+            <div class="lineup-title" style="color: #38bdf8;">ROLL & PICK ĐỘI HÌNH BAN ĐẦU (DÙNG CHO TOÀN BỘ GIẢI)</div>
+            <div class="teams-grid" id="teams-container"></div>
+        </div>
+
+        <div class="result-box" id="result-box">
+            <div id="match-status" class="result-title"></div>
+            <div class="score-board">
+                <p>Sức Mạnh Đội Bạn: <span id="player-power" style="font-weight: bold; color: #38bdf8;">0</span> PTS</p>
+                <p>Sức Mạnh Đối Thủ: <span id="enemy-power" style="font-weight: bold; color: #ef4444;">0</span> PTS</p>
+            </div>
+            <div id="synergy-info" style="margin-bottom: 15px; font-size: 0.9rem; color: #a7f3d0;"></div>
+            <button class="action-btn" id="next-btn" onclick="handleNextStep()">Tiếp Tục</button>
+        </div>
+    </div>
+
+    <script>
+        const DATABASE = [
+            { teamName: "TEAM FLASH", year: 2019, region: "AOG", top: { name: "Elly", power: 98 }, jug: { name: "ADC", power: 100 }, mid: { name: "XB", power: 99 }, ad: { name: "Daim", power: 93 }, sup: { name: "ProE", power: 99 } },
+            { teamName: "TEAM FLASH", year: 2023, region: "AOG", top: { name: "Bear", power: 88 }, jug: { name: "Chu", power: 86 }, mid: { name: "XB", power: 92 }, ad: { name: "Bé Trọc", power: 89 }, sup: { name: "Case", power: 87 } },
+            { teamName: "SAIGON PHANTOM", year: 2023, region: "AOG", top: { name: "Jiro", power: 95 }, jug: { name: "Bang", power: 100 }, mid: { name: "Fish", power: 97 }, ad: { name: "Red", power: 96 }, sup: { name: "Khoa", power: 97 } },
+            { teamName: "SAIGON PHANTOM", year: 2020, region: "AOG", top: { name: "BronzeV", power: 93 }, jug: { name: "Bangg", power: 96 }, mid: { name: "LACLAC", power: 89 }, ad: { name: "Red", power: 92 }, sup: { name: "Zeref", power: 91 } },
+            { teamName: "V GAMING", year: 2022, region: "AOG", top: { name: "BirdLB", power: 96 }, jug: { name: "Quang", power: 95 }, mid: { name: "Maris", power: 99 }, ad: { name: "Sea", power: 94 }, sup: { name: "Han", power: 96 } },
+            { teamName: "FPT X FLASH", year: 2025, region: "AOG", top: { name: "Bear", power: 87 }, jug: { name: "Gray", power: 86 }, mid: { name: "Maris", power: 89 }, ad: { name: "HuyHoang", power: 84 }, sup: { name: "Yutan", power: 83 } },
+            { teamName: "TT GAMING", year: 2025, region: "AOG", top: { name: "Case", power: 84 }, jug: { name: "Sonic", power: 83 }, mid: { name: "Cheri", power: 82 }, ad: { name: "Ngọc Quý", power: 85 }, sup: { name: "Dominic", power: 82 } },
+            
+            { teamName: "BACON TIME", year: 2023, region: "RPL", top: { name: "MarkKy", power: 100 }, jug: { name: "Alain", power: 96 }, mid: { name: "Kimsensei", power: 97 }, ad: { name: "Erez", power: 99 }, sup: { name: "TaoX", power: 98 } },
+            { teamName: "TALON ESPORTS", year: 2021, region: "RPL", top: { name: "NTNz", power: 95 }, jug: { name: "MOOP", power: 98 }, mid: { name: "IpodPro", power: 98 }, ad: { name: "Erez", power: 98 }, sup: { name: "Tony", power: 96 } },
+            { teamName: "BURIRAM UNITED", year: 2021, region: "RPL", top: { name: "Overfly", power: 94 }, jug: { name: "F1", power: 93 }, mid: { name: "NuNu", power: 99 }, ad: { name: "Difoxn", power: 95 }, sup: { name: "KSSA", power: 92 } },
+
+            { teamName: "MAD TEAM", year: 2020, region: "GCS", top: { name: "Yuzon", power: 96 }, jug: { name: "Neil", power: 100 }, mid: { name: "Fanta", power: 95 }, ad: { name: "03.22", power: 98 }, sup: { name: "KuKu", power: 96 } },
+            { teamName: "FLASH WOLVES", year: 2022, region: "GCS", top: { name: "NNNL", power: 92 }, jug: { name: "ZEN", power: 93 }, mid: { name: "ZHENZHE", power: 92 }, ad: { name: "YUXIANG", power: 93 }, sup: { name: "GUA", power: 91 } }
+        ];
+
+        const ROLES = ["top", "jug", "mid", "ad", "sup"];
+        const ROLE_NAMES = ["TOP", "JUG", "MID", "AD", "SUP"];
+        
+        const STAGES = [
+            { name: "VÒNG BẢNG", mult: 0.75 },
+            { name: "TỨ KẾT", mult: 1.0 },
+            { name: "BÁN KẾT", mult: 1.10 },
+            { name: "CHUNG KẾT", mult: 1.25 }
+        ];
+
+        let currentStageIdx = 0;
+        let myTeam = [null, null, null, null, null];
+        let enemyTeam = [];
+        let enemyTotalPower = 0;
+        let rolePicked = [false, false, false, false, false];
+        let currentOptions = [];
+        let lastMatchWin = false;
+        let isDraftFinished = false;
+        let isMatchRevealed = false;
+
+        function startTournament() {
+            currentStageIdx = 0;
+            myTeam = [null, null, null, null, null];
+            rolePicked = [false, false, false, false, false];
+            isDraftFinished = false;
+
+            document.getElementById("draft-box").style.display = "block";
+            document.getElementById("result-box").style.display = "none";
+            document.getElementById("player-total-tag").innerText = "0 PTS";
+            
+            updateProgressBar();
+            renderLineups();
+            rollTeams();
+        }
+
+        function prepareStageMatch() {
+            isMatchRevealed = false;
+            
+            // Random đối thủ độc lập cho vòng đấu hiện tại
+            enemyTeam = ROLES.map(role => {
+                let randomTeam = DATABASE[Math.floor(Math.random() * DATABASE.length)];
+                return {
+                    name: randomTeam[role].name,
+                    power: randomTeam[role].power,
+                    team: randomTeam.teamName,
+                    year: randomTeam.year
+                };
+            });
+
+            // Tính toán điểm số đối thủ theo hệ số độ khó vòng
+            let baseEnemyPower = enemyTeam.reduce((sum, p) => sum + p.power, 0);
+            let synergyEnemy = calculateSynergyBonus(enemyTeam);
+            enemyTotalPower = Math.round((baseEnemyPower + synergyEnemy) * STAGES[currentStageIdx].mult);
+
+            updateProgressBar();
+            document.getElementById("enemy-total-tag").innerText = "??? PTS";
+            document.getElementById("result-box").style.display = "none";
+
+            renderLineups();
+            
+            // Tự động lật mở kết quả đấu ngay nếu đã xong Draft từ Vòng 1
+            if (isDraftFinished) {
+                executeMatch();
+            }
+        }
+
+        function updateProgressBar() {
+            STAGES.forEach((stage, idx) => {
+                const el = document.getElementById(`stage-${idx}`);
+                el.className = 'stage-item';
+                if (idx < currentStageIdx) el.classList.add('passed');
+                else if (idx === currentStageIdx) el.classList.add('active');
+            });
+        }
+
+        function calculateSynergyBonus(teamArray) {
+            let teamCounts = {};
+            teamArray.forEach(p => {
+                if(!p) return;
+                let key = `${p.team} (${p.year})`;
+                teamCounts[key] = (teamCounts[key] || 0) + 1;
+            });
+            let bonusTotal = 0;
+            for(let key in teamCounts) {
+                let cnt = teamCounts[key];
+                if (cnt === 2) bonusTotal += 15;
+                else if (cnt === 3) bonusTotal += 35;
+                else if (cnt === 4) bonusTotal += 60;
+                else if (cnt === 5) bonusTotal += 100;
+            }
+            return bonusTotal;
+        }
+
+        function renderLineups() {
+            // Render Đội bạn
+            const myContainer = document.getElementById("my-slots-container");
+            myContainer.innerHTML = "";
+            ROLES.forEach((role, idx) => {
+                const player = myTeam[idx];
+                const card = document.createElement("div");
+                card.className = `slot-card ${player ? 'filled' : ''}`;
+                card.innerHTML = `
+                    <span class="role-name">${ROLE_NAMES[idx]}</span>
+                    <span class="player-name">${player ? player.name : '---'}</span>
+                    <span class="team-info">${player ? `${player.team} '${player.year.toString().slice(-2)}` : 'Chưa chọn'}</span>
+                `;
+                myContainer.appendChild(card);
+            });
+
+            // Render Đội đối thủ
+            const enemyContainer = document.getElementById("enemy-slots-container");
+            enemyContainer.innerHTML = "";
+            ROLES.forEach((role, idx) => {
+                const player = enemyTeam[idx];
+                const card = document.createElement("div");
+                
+                if (isMatchRevealed) {
+                    card.className = "slot-card enemy";
+                    card.innerHTML = `
+                        <span class="role-name">${ROLE_NAMES[idx]}</span>
+                        <span class="player-name">${player.name}</span>
+                        <span class="team-info">${player.team} '${player.year.toString().slice(-2)}</span>
+                    `;
+                } else {
+                    card.className = "slot-card hidden";
+                    card.innerHTML = `
+                        <span class="role-name">${ROLE_NAMES[idx]}</span>
+                        <span class="player-name" style="color: #64748b;">???</span>
+                        <span class="team-info">Đang ẩn</span>
+                    `;
+                }
+                enemyContainer.appendChild(card);
+            });
+        }
+
+        function rollTeams() {
+            let indices = [];
+            while(indices.length < 3) {
+                let r = Math.floor(Math.random() * DATABASE.length);
+                if(!indices.includes(r)) indices.push(r);
+            }
+            currentOptions = indices.map(i => DATABASE[i]);
+            renderDraftOptions();
+        }
+
+        function renderDraftOptions() {
+            const container = document.getElementById("teams-container");
+            container.innerHTML = "";
+
+            currentOptions.forEach((team) => {
+                const card = document.createElement("div");
+                card.className = "team-card";
+                
+                let buttonsHTML = "";
+                ROLES.forEach((role, rIdx) => {
+                    const disabled = rolePicked[rIdx] ? "disabled" : "";
+                    const label = rolePicked[rIdx] ? `[Đã chọn ${ROLE_NAMES[rIdx]}]` : `${ROLE_NAMES[rIdx]}: ${team[role].name}`;
+                    buttonsHTML += `<button class="role-btn" ${disabled} onclick="selectPlayer(${currentOptions.indexOf(team)}, ${rIdx})">${label}</button>`;
+                });
+
+                card.innerHTML = `
+                    <div class="team-header">
+                        <span class="team-title">${team.teamName} (${team.year})</span>
+                        <span class="region-badge">${team.region}</span>
+                    </div>
+                    ${buttonsHTML}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectPlayer(teamIdx, roleIdx) {
+            const selectedTeam = currentOptions[teamIdx];
+            const roleKey = ROLES[roleIdx];
+            
+            myTeam[roleIdx] = {
+                name: selectedTeam[roleKey].name,
+                power: selectedTeam[roleKey].power,
+                team: selectedTeam.teamName,
+                year: selectedTeam.year,
+                region: selectedTeam.region
+            };
+            rolePicked[roleIdx] = true;
+
+            // Tính tổng sức mạnh hiển thị cố định của bạn
+            let basePower = myTeam.reduce((sum, p) => sum + (p ? p.power : 0), 0);
+            let synergyBonus = calculateSynergyBonus(myTeam);
+            document.getElementById("player-total-tag").innerText = `${basePower + synergyBonus} PTS`;
+
+            renderLineups();
+
+            if (rolePicked.every(val => val === true)) {
+                isDraftFinished = true;
+                document.getElementById("draft-box").style.display = "none";
+                prepareStageMatch();
+            } else {
+                rollTeams();
+            }
+        }
+
+        function executeMatch() {
+            isMatchRevealed = true;
+            document.getElementById("enemy-total-tag").innerText = `${enemyTotalPower} PTS`;
+            
+            renderLineups(); // Lật mở đối thủ
+
+            let basePower = myTeam.reduce((sum, p) => sum + p.power, 0);
+            let synergyBonus = calculateSynergyBonus(myTeam);
+            let totalPower = basePower + synergyBonus;
+
+            document.getElementById("player-power").innerText = totalPower;
+            document.getElementById("enemy-power").innerText = enemyTotalPower;
+
+            const statusEl = document.getElementById("match-status");
+            const btnEl = document.getElementById("next-btn");
+
+            if (totalPower >= enemyTotalPower) {
+                lastMatchWin = true;
+                if (currentStageIdx === STAGES.length - 1) {
+                    statusEl.innerText = "🏆 CHÚC MỪNG! ĐỘI HÌNH CỦA BẠN ĐÃ VÔ ĐỊCH THẾ GIỚI!";
+                    statusEl.className = "result-title victory";
+                    btnEl.innerText = "Tạo Giải Mới & Draft Lại";
+                } else {
+                    statusEl.innerText = `🎉 CHÚC MỪNG! BẠN ĐÃ THẮNG ${STAGES[currentStageIdx].name}!`;
+                    statusEl.className = "result-title victory";
+                    btnEl.innerText = `Tiến Vào ${STAGES[currentStageIdx + 1].name}`;
+                }
+            } else {
+                lastMatchWin = false;
+                statusEl.innerText = `❌ ĐỘI HÌNH CỦA BẠN ĐÃ BỊ LOẠI Ở ${STAGES[currentStageIdx].name}!`;
+                statusEl.className = "result-title defeat";
+                btnEl.innerText = "Thử Lại Từ Vòng Bảng (Draft Lại)";
+            }
+
+            document.getElementById("synergy-info").innerText = synergyBonus > 0 ? 
+                `🔥 Synergy thưởng cố định của bạn: +${synergyBonus} PTS` : "Không có synergy thưởng";
+
+            document.getElementById("result-box").style.display = "block";
+        }
+
+        function handleNextStep() {
+            if (!lastMatchWin) {
+                startTournament();
+            } else {
+                if (currentStageIdx < STAGES.length - 1) {
+                    currentStageIdx++;
+                    prepareStageMatch();
+                } else {
+                    startTournament();
+                }
+            }
+        }
+
+        startTournament();
+    </script>
+</body>
+</html>
